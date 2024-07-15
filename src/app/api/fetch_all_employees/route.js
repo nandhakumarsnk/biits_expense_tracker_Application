@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import mysql from "mysql2/promise";
 
+// const db = mysql.createPool({
+//   host: "localhost",
+//   user: "root",
+//   password: "Nandhakumar@123",
+//   database: "biits_expense_tracker",
+// });
+
 const db = mysql.createPool({
   host: "localhost",
-  user: "root",
-  password: "Nandhakumar@123",
-  database: "biits_expense_tracker",
+  user: "expense_user",
+  password: "expense_user@123",
+  database: "expense",
 });
 
 export async function GET() {

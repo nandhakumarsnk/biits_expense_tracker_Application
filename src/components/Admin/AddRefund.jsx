@@ -15,7 +15,6 @@ const AddRefund = ({
     refund_status: "",
     refund_receipt: [],
   };
-  const refund_Id = refundDetails?.id;
   const [receiptFileName, setReceiptFileName] = useState("");
   const [formData, setFormData] = useState(initialRefundFormData);
   const [refundId, setRefundId] = useState(null);
@@ -58,7 +57,7 @@ const AddRefund = ({
       return;
     }
     const formDataToSend = new FormData();
-    formDataToSend.append("refund_status", formData.title);
+    formDataToSend.append("refund_status", formData.refund_status);
     console.log(formData.refund_receipt, "nandha1");
     if (Array.isArray(formData.refund_receipt)) {
       formData.refund_receipt.forEach((file, index) => {
@@ -67,10 +66,12 @@ const AddRefund = ({
     }
 
     // const apiEndpoint = `${process.env.NEXT_PUBLIC_DOCTOR_UPDATE_BLOG_API_ENDPOINT}${blogId}/`;
-    const apiEndpoint = `http://localhost:3001/update_expense/${refundId}/`;
+    const apiEndpoint = `http://localhost:3000/api/update_expense/${refundId}/`;
 
     try {
       const response = await axios.post(apiEndpoint, formDataToSend);
+
+      console.log(response);
 
       if (response?.statusText === "OK") {
         toast.success("Refund Updated successfully!", {
@@ -96,7 +97,7 @@ const AddRefund = ({
   useEffect(() => {
     if (refundDetails) {
       setFormData({
-        refund_status: "pending" || "pending",
+        refund_status: "Pending" || "Pending",
         refund_receipt: refundDetails?.refund_receipt
           ? [...refundDetails?.refund_receipt]
           : [],
@@ -108,7 +109,7 @@ const AddRefund = ({
     } else {
       // Set default values if blogDetails is empty
       setFormData({
-        refund_status: "pending",
+        refund_status: "Pending",
         refund_receipt: [],
       });
       setReceiptFileName("");
@@ -254,7 +255,7 @@ const AddRefund = ({
             Close
           </Button>
         )}
-        {(refundDetails?.refund_status === "pending" ||
+        {(refundDetails?.refund_status === "Pending" ||
           refundDetails?.refund_status === "Partially Paid") && (
           <>
             <Button

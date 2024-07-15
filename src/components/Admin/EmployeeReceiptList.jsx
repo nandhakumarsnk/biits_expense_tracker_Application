@@ -27,7 +27,7 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
   const [receiptLoading, setReceiptLoading] = useState(false);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
   const [addRefundModal, setAddRefundModal] = useState(false);
-  const [expenseReceiptImages, setExpenseReceiptImages] = useState(null);
+  // const [expenseReceiptImages, setExpenseReceiptImages] = useState(null);
   const [refundDetails, setRefundDetails] = useState(null);
 
   const fetchExpensesData = useCallback(async () => {
@@ -87,9 +87,9 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
                 <th scope="col" className="appHead">
                   Date
                 </th>
-                <th scope="col" className="appHead">
+                {/* <th scope="col" className="appHead">
                   Items
-                </th>
+                </th> */}
                 <th scope="col" className="appHead">
                   View Receipts
                 </th>
@@ -132,12 +132,16 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
                         <td>{index + 1}</td>
                         <td>{expense?.emp_id}</td>
                         <td>{expense?.date}</td>
-                        <td>{expense?.items}</td>
+                        {/* <td>{expense?.items}</td> */}
+                        {/* {expense?.items?.map((item, index) => {
+                          <td>{item}</td>;
+                        })} */}
                         <td>
                           <p
                             onClick={() => {
                               setShowReceiptModal(true);
-                              setExpenseReceiptImages(expense?.receipt);
+                              // setExpenseReceiptImages(expense?.receipt);
+                              setRefundDetails(expense);
                             }}
                           >
                             View
@@ -176,7 +180,8 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
         <ViewExpenseReceipts
           showReceiptModal={showReceiptModal}
           setShowReceiptModal={setShowReceiptModal}
-          expenseReceiptImages={expenseReceiptImages}
+          // expenseReceiptImages={expenseReceiptImages}
+          refundDetails={refundDetails}
         />
         <AddRefund
           addRefundModal={addRefundModal}
