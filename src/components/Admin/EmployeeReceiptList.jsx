@@ -34,9 +34,8 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
     try {
       setReceiptLoading(true);
       if (employeeId) {
-        // let endpoint = `${process.env.NEXT_PUBLIC_GET_EMPLOYEE_EXPENSES}${employeeId}/`;
-        // let endpoint = `https://kind-robinson.85-25-46-7.plesk.page/fetch_expenses/${employeeId}`;
-        let endpoint = `http://localhost:3000/api/fetch_expenses/${employeeId}`;
+        let endpoint = `${process.env.NEXT_PUBLIC_GET_EMPLOYEE_EXPENSES}${employeeId}`;
+        // let endpoint = `http://localhost:3000/api/fetch_expenses/${employeeId}`;
 
         const response = await axios.get(endpoint);
         console.log(response, "this is response");

@@ -2,40 +2,19 @@ import { NextResponse } from "next/server";
 import path from "path";
 import { writeFile } from "fs/promises";
 import fs from "fs-extra";
-import mysql from "mysql2/promise";
-
-// const db = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "Nandhakumar@123",
-//   database: "biits_expense_tracker",
-// });
-
-const db = mysql.createPool({
-  host: "localhost",
-  user: "expense_user",
-  password: "expense_user@123",
-  database: "expense",
-});
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+import db from "../../db.js";
 
 export const POST = async (req) => {
   const formData = await req.formData();
 
   const emp_id = formData.get("emp_id");
+  const emp_name = formData.get("emp_name");
   const date = formData.get("date");
   const items = formData.get("items");
-  const amount = formData.get("amount");
-  const receiptFiles = formData.getAll("receipt");
 
-  
+  console.log(emp_id, emp_name, date, items);
 
-  if (!emp_id || !date || !items || !amount || receiptFiles.length === 0) {
+  if (!emp_id || !emp_name || !date || !items) {
     return NextResponse.json(
       { error: "Please provide all required fields" },
       { status: 400 }
@@ -48,7 +27,14 @@ export const POST = async (req) => {
     parsedItems = JSON.parse(items);
     if (
       !Array.isArray(parsedItems) ||
-      parsedItems.some((item) => !item.item || !item.amount)
+      parsedItems.some(
+        (item) =>
+          !item.item_category ||
+          !item.item_subcategory ||
+          !item.Description ||
+          !item.amount_in_INR ||
+          !item.attachment
+      )
     ) {
       throw new Error("Invalid items format");
     }
@@ -56,37 +42,58 @@ export const POST = async (req) => {
     return NextResponse.json(
       {
         error:
-          "Invalid items format, must be an array of objects with 'item' and 'amount'",
+          "Invalid items format, must be an array of objects with 'item_category', 'item_subcategory', 'Description', 'amount_in_INR', and 'attachment'",
       },
       { status: 400 }
     );
   }
 
-  const receiptPaths = [];
   const uploadDir = path.join(process.cwd(), "public", "uploads", emp_id);
 
   try {
     // Ensure the directory exists
     await fs.ensureDir(uploadDir);
 
-    for (const file of receiptFiles) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const filename = file.name.replaceAll(" ", "_");
-      const filePath = path.join(uploadDir, filename);
+    for (const item of parsedItems) {
+      const receiptFiles = item.attachment; // Assuming 'receipt' is an array of files for each item
+      const receiptPaths = [];
 
-      await writeFile(filePath, buffer);
-      receiptPaths.push(`/uploads/${emp_id}/${filename}`);
+      if (receiptFiles && Array.isArray(receiptFiles)) {
+        // for (const file of receiptFiles) {
+        //   const buffer = Buffer.from(await file.arrayBuffer());
+        //   const filename = file.name.replaceAll(" ", "_");
+        //   const filePath = path.join(uploadDir, filename);
+
+        //   await writeFile(filePath, buffer);
+        //   receiptPaths.push(`/uploads/${emp_id}/${filename}`);
+        // }
+        for (const value of receiptFiles) {
+          if (typeof value === "string" && value.startsWith("/uploads/")) {
+            // It's a URL, keep it as is
+            receiptPaths.push(value);
+          } else {
+            // It's a file, process and save it
+            const file = value;
+            const filename = file.name.replace(/ /g, "_");
+            const filePath = path.join(uploadDir, filename);
+
+            // Save the file to disk
+            const buffer = await file.arrayBuffer();
+            await fs.writeFile(filePath, Buffer.from(buffer));
+
+            // Store the path to be saved in the database
+            receiptPaths.push(`/uploads/refunds/${id}/${filename}`);
+          }
+        }
+      }
+
+      // Update attachments in the current item
+      item.attachment = receiptPaths;
     }
 
     await db.query(
-      "INSERT INTO expense_details (emp_id, date, items, receipt, amount) VALUES (?, ?, ?, ?, ?)",
-      [
-        emp_id,
-        date,
-        JSON.stringify(parsedItems),
-        JSON.stringify(receiptPaths),
-        amount,
-      ]
+      "INSERT INTO expense_details (emp_id, emp_name, date, items) VALUES (?, ?, ?, ?)",
+      [emp_id, emp_name, date, JSON.stringify(parsedItems)]
     );
 
     return NextResponse.json(

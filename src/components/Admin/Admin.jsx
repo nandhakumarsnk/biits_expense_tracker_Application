@@ -38,7 +38,8 @@ const Admin = () => {
   const fetchAllEmployees = useCallback(async () => {
     try {
       setLoading(true);
-      let endpoint = `http://localhost:3000/api/fetch_all_employees`;
+      let endpoint = `${process.env.NEXT_PUBLIC_FETCH_ALL_EMPLOYEE_LIST}`;
+      // let endpoint = `http://localhost:3000/api/fetch_all_employees`;
 
       const response = await axios.get(endpoint);
       console.log(response, "this is response");

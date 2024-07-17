@@ -65,8 +65,8 @@ const AddRefund = ({
       });
     }
 
-    // const apiEndpoint = `${process.env.NEXT_PUBLIC_DOCTOR_UPDATE_BLOG_API_ENDPOINT}${blogId}/`;
-    const apiEndpoint = `http://localhost:3000/api/update_expense/${refundId}/`;
+    const apiEndpoint = `${process.env.NEXT_PUBLIC_REFUND_EXPENSE_EMPLOYEE_EXPENSES}${refundId}`;
+    // const apiEndpoint = `http://localhost:3000/api/update_expense/${refundId}/`;
 
     try {
       const response = await axios.post(apiEndpoint, formDataToSend);

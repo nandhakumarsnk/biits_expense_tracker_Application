@@ -1,28 +1,7 @@
 import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs-extra";
-import mysql from "mysql2/promise";
-
-// Setup MySQL connection
-// const db = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "Nandhakumar@123",
-//   database: "biits_expense_tracker",
-// });
-
-const db = mysql.createPool({
-  host: "localhost",
-  user: "expense_user",
-  password: "expense_user@123",
-  database: "expense",
-});
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+import db from "../../../db.js";
 
 export const POST = async (req, context) => {
   const { params } = context;
@@ -40,7 +19,7 @@ export const POST = async (req, context) => {
       if (!file) break;
       refund_receipt.push(file);
     }
-
+    console.log(id, refund_status, refund_receipt);
     // Validate inputs
     if (!id || !refund_status || refund_receipt.length === 0) {
       return NextResponse.json(

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import mysql from "mysql2/promise";
+// import mysql from "mysql2/promise";
 import bcrypt from "bcrypt";
+import db from "../../db.js";
 
 // const db = mysql.createPool({
 //   host: "localhost",
@@ -9,16 +10,12 @@ import bcrypt from "bcrypt";
 //   database: "biits_expense_tracker",
 // });
 
-const db = mysql.createPool({
-  host: "localhost",
-  user: "expense_user",
-  password: "expense_user@123",
-  database: "expense",
-});
 console.log("working");
 
 export async function POST(request) {
   const { email, password, user_role } = await request.json();
+
+  console.log(email.password, user_role);
 
   try {
     const [rows] = await db.query("SELECT * FROM emp_details WHERE email = ?", [
@@ -47,6 +44,7 @@ export async function POST(request) {
     }
 
     const { password: userPassword, ...userWithoutPassword } = user;
+
     return NextResponse.json({
       message: "Login successful",
       user: userWithoutPassword,

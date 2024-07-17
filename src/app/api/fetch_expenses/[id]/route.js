@@ -1,19 +1,5 @@
 import { NextResponse } from "next/server";
-import mysql from "mysql2/promise";
-
-// const db = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "Nandhakumar@123",
-//   database: "biits_expense_tracker",
-// });
-
-const db = mysql.createPool({
-  host: "localhost",
-  user: "expense_user",
-  password: "expense_user@123",
-  database: "expense",
-});
+import db from "../../../db.js";
 
 export async function GET(request, { params }) {
   console.log(params.id);
@@ -37,7 +23,7 @@ export async function GET(request, { params }) {
     console.log(results);
 
     const formattedResults = results.map((expense) => {
-      expense.receipt = JSON.parse(expense.receipt);
+      // expense.receipt = JSON.parse(expense.receipt);
       expense.date = new Date(expense.date).toISOString().split("T")[0];
       if (expense.refund_receipt) {
         try {
