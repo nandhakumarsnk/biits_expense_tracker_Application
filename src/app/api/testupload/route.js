@@ -30,6 +30,12 @@ export const POST = async (req) => {
     const amount = formData.get(`item[${i}]amount`);
     const amount_in_INR = formData.get(`item[${i}]amount_in_INR`);
 
+    console.log(item_category);
+    console.log(item_subcategory);
+    console.log(description);
+    console.log(amount);
+    console.log(amount_in_INR);
+
     if (
       !item_category ||
       !item_subcategory ||
@@ -45,10 +51,12 @@ export const POST = async (req) => {
     let j = 0;
 
     while (formData.has(`item[${i}]attachment[${j}]`)) {
-      const file = await formData.get(`item[${i}]attachment[${j}`);
+      // const file = await formData.get(`item[${i}]attachment[${j}`);
+      const file = formData.get(`item[${i}]attachment[${j}]`);
 
+      console.log(file);
       // Check if the file is from a browser or React Native
-      if (file.name1) {
+      if (file.name) {
         const buffer = Buffer.from(await file.arrayBuffer());
         const filename = file.name.replace(/\s+/g, "_");
         const uploadDir = path.join(process.cwd(), "public", "uploads", emp_id);
@@ -109,14 +117,58 @@ export const POST = async (req) => {
     );
 
     return NextResponse.json(
-      { message: "Expense details stored successfully" },
+      { message: "Expense details stored successfully", data: formData },
       { status: 201 }
     );
   } catch (error) {
     console.error("Internal server error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    // return NextResponse.json(
+    //   { error: "Internal server error" },
+    //   { status: 500 }
+    // );
+
+    return NextResponse.json({ UpdatedError: error }, { status: 400 });
   }
 };
+
+// import { NextResponse } from "next/server";
+// import path from "path";
+// import { writeFile } from "fs/promises";
+// import fs from "fs-extra";
+// import db from "../../db.js";
+
+// export const POST = async (req) => {
+//   try {
+//     const formData = await req.formData();
+
+//     // Convert formData to a JSON object
+//     const formDataObj = {};
+//     for (const [key, value] of formData.entries()) {
+//       if (value instanceof File) {
+//         formDataObj[key] = {
+//           name: value.name,
+//           type: value.type,
+//           size: value.size,
+//         };
+//       } else {
+//         formDataObj[key] = value;
+//       }
+//     }
+
+//     console.log(formDataObj);
+
+//     return NextResponse.json(
+//       {
+//         message: "Expense details stored successfully",
+//         data: formDataObj,
+//       },
+//       { status: 201 }
+//     );
+//   } catch (error) {
+//     console.error("Internal server error:", error);
+//     return NextResponse.json(
+//       { error: "Internal server error", details: error.message },
+//       { status: 500 }
+//     );
+//   }
+// };
