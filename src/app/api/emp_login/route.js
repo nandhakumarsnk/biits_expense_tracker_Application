@@ -10,7 +10,6 @@ import db from "../../db.js";
 //   database: "biits_expense_tracker",
 // });
 
-console.log("working");
 
 export async function POST(request) {
   const { email, password, user_role } = await request.json();

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import db from "../../db.js";
 
-
 export async function GET() {
   try {
     const [results] = await db.query("SELECT * FROM emp_details");

@@ -1,32 +1,38 @@
-import React from "react";
+// import React from "react";
 
-const page = () => {
-  return (
-    <div>
-      <h1>Nandha</h1>
-    </div>
-  );
-};
-
-export default page;
-
-// import pool from "../utils/mysql.js";
-
-// const FetchData = async () => {
-//   try {
-//     const connection = await pool.getConnection();
-//     const [row] = await connection.query("SELECT * FROM emp_details");
-//     console.log(row);
-//     return row;
-//   } catch (error) {
-//     throw error;
-//   }
+// const page = () => {
+//   return (
+//     <div>
+//       <h1>Nandha</h1>
+//     </div>
+//   );
 // };
 
-// FetchData()
-//   .then((data) => {
-//     console.log(data);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
+// export default page;
+
+"use client";
+import { useEffect } from "react";
+import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+
+export default function Home() {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (session?.user?.message === "Login successful") {
+        window.location.href = "/admin";
+      } else {
+        window.location.href = "/login";
+      }
+    }
+  }, [router, session]);
+
+  return (
+    <main className={styles.main}>
+      <p></p>
+    </main>
+  );
+}

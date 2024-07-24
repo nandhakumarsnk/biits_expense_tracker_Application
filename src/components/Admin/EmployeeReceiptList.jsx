@@ -1,10 +1,14 @@
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
-import image1 from "../../../public/next.svg";
+import noData from "../../../public/images/nodata.png";
 import axios from "axios";
 import { Placeholder } from "react-bootstrap";
 import ViewExpenseReceipts from "./ViewExpenseReceipts";
 import AddRefund from "./AddRefund";
+import { FaRegEye } from "react-icons/fa";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { usePathname, useRouter } from "next/navigation";
 
 const renderPlaceholders = (length) => {
   const placeholders = Array.from({ length }, (_, index) => (
@@ -23,6 +27,9 @@ const renderPlaceholders = (length) => {
 };
 
 const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [expensesList, setExpensesList] = useState([]);
   const [receiptLoading, setReceiptLoading] = useState(false);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
@@ -63,118 +70,156 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
   useEffect(() => {
     fetchExpensesData();
   }, [fetchExpensesData]);
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "Pending":
+        return "pending";
+      case "Partially Paid":
+        return "partially-paid";
+      case "Fully Paid":
+        return "fully-paid";
+      default:
+        return "";
+    }
+  };
+
+  const handleTabChange = () => {
+    const updatedPath = `${pathname}`;
+    router.replace(updatedPath, { shallow: true });
+  };
   return (
     <>
       <p
         onClick={() => {
           setIndividualReceipts(false);
+          localStorage.removeItem("setIndividualReceipts");
+          localStorage.removeItem("setEmployeeId");
+          handleTabChange();
         }}
       >
-        back
+        <MdOutlineKeyboardBackspace color="#1e1e75" size={40} /> &nbsp;
+        <span className="back-btn">back</span>
       </p>
       <div className="row">
-        <div className="allApp-scroll px-3">
-          <table className="table">
-            <thead className="custom-table-head">
-              <tr>
-                <th scope="col" className="appHead">
-                  S.no
-                </th>
-                <th scope="col" className="appHead">
-                  Employee Id
-                </th>
-                <th scope="col" className="appHead">
-                  Date
-                </th>
-                {/* <th scope="col" className="appHead">
+        <div className="app-table-pink">
+          <div className="allApp-scroll px-3">
+            <table className="table">
+              <thead className="custom-table-head">
+                <tr className="text-center">
+                  <th scope="col" className="appHead">
+                    S.no
+                  </th>
+                  <th scope="col" className="appHead">
+                    Employee Id
+                  </th>
+                  <th scope="col" className="appHead">
+                    Date
+                  </th>
+                  {/* <th scope="col" className="appHead">
                   Items
                 </th> */}
-                <th scope="col" className="appHead">
-                  View Receipts
-                </th>
-                <th scope="col" className="appHead">
-                  Refund Status
-                </th>
-                <th scope="col" className="appHead">
-                  Refund Receipts
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="allApp-scroll px-3">
-              {receiptLoading ? (
-                <tr>
-                  {" "}
-                  <td colSpan="9">{renderPlaceholders(5)}</td>{" "}
+                  <th scope="col" className="appHead">
+                    View Details
+                  </th>
+                  <th scope="col" className="appHead">
+                    Refund Status
+                  </th>
+                  <th scope="col" className="appHead">
+                    Refund Receipts
+                  </th>
                 </tr>
-              ) : (
-                <>
-                  {expensesList.length === 0 ? (
-                    <>
-                      <tr>
-                        <td colSpan="7">
-                          <div className=" d-flex justify-content-center align-items-center mt-5">
-                            <Image
-                              src={image1}
-                              className="no-data-found-img"
-                              alt="No data"
-                              width={300}
-                              height={300}
-                            ></Image>
-                          </div>
-                        </td>
-                      </tr>
-                    </>
-                  ) : (
-                    expensesList?.map((expense, index) => (
-                      <tr key={expense.id} className="custom-table-body">
-                        <td>{index + 1}</td>
-                        <td>{expense?.emp_id}</td>
-                        <td>{expense?.date}</td>
-                        {/* <td>{expense?.items}</td> */}
-                        {/* {expense?.items?.map((item, index) => {
-                          <td>{item}</td>;
-                        })} */}
-                        <td>
-                          <p
-                            onClick={() => {
-                              setShowReceiptModal(true);
-                              // setExpenseReceiptImages(expense?.receipt);
-                              setRefundDetails(expense);
-                            }}
+              </thead>
+
+              <tbody className="allApp-scroll px-3">
+                {receiptLoading ? (
+                  <tr>
+                    {" "}
+                    <td colSpan="9">{renderPlaceholders(10)}</td>{" "}
+                  </tr>
+                ) : (
+                  <>
+                    {expensesList.length === 0 ? (
+                      <>
+                        <tr>
+                          <td colSpan="7">
+                            <div className=" d-flex justify-content-center align-items-center mt-5">
+                              <Image
+                                src={noData}
+                                className="no-data-found-img"
+                                alt="No data"
+                                width={300}
+                                height={300}
+                              ></Image>
+                            </div>
+                          </td>
+                        </tr>
+                      </>
+                    ) : (
+                      expensesList
+                        ?.slice()
+                        .reverse()
+                        .map((expense, index) => (
+                          <tr
+                            key={expense.id}
+                            className="custom-table-body text-center"
                           >
-                            View
-                          </p>
-                        </td>
-                        <td>{expense?.refund_status}</td>
-                        <td>
-                          {expense?.refund_receipt != null ? (
-                            <p
-                              onClick={() => {
-                                setAddRefundModal(true);
-                                setRefundDetails(expense);
-                              }}
+                            <td>{index + 1}</td>
+                            <td>{expense?.emp_id}</td>
+                            <td>{expense?.date}</td>
+
+                            <td>
+                              <p
+                                onClick={() => {
+                                  setShowReceiptModal(true);
+                                  setRefundDetails(expense);
+                                }}
+                                className="view-btn"
+                              >
+                                view
+                                {/* <FaRegEye color="#1e1e75" size={25} /> */}
+                              </p>
+                            </td>
+                            <td
+                              className={getStatusClass(expense?.refund_status)}
                             >
-                              View
-                            </p>
-                          ) : (
-                            <p
-                              onClick={() => {
-                                setAddRefundModal(true);
-                                setRefundDetails(expense);
-                              }}
-                            >
-                              Add
-                            </p>
-                          )}
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </>
-              )}
-            </tbody>
-          </table>
+                              {expense?.refund_status}
+                            </td>
+                            <td>
+                              {expense?.refund_receipt.length != 0 ? (
+                                <p
+                                  onClick={() => {
+                                    setAddRefundModal(true);
+                                    setRefundDetails(expense);
+                                  }}
+                                >
+                                  <FaRegEye
+                                    size={25}
+                                    className="add-icon-btn"
+                                  />
+                                </p>
+                              ) : (
+                                <p
+                                  onClick={() => {
+                                    setAddRefundModal(true);
+                                    setRefundDetails(expense);
+                                  }}
+                                >
+                                  <IoAddCircleOutline
+                                    size={25}
+                                    className="add-icon-btn"
+                                  />
+                                </p>
+                              )}
+                            </td>
+                          </tr>
+                        ))
+                    )}
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
         <ViewExpenseReceipts
           showReceiptModal={showReceiptModal}

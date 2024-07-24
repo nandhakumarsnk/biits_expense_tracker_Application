@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import { signIn, useSession } from "next-auth/react";
 
 const LoginPage = () => {
-  const [empId, setEmpId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,38 +14,24 @@ const LoginPage = () => {
     setLoading(true);
     setError("");
 
-    const apiEndpoint = `${process.env.NEXT_PUBLIC_LOGIN_ADMIN}`;
-
     try {
-      const response = await axios.post(
-        apiEndpoint,
-        {
-          email: empId,
-          password: password,
-          user_role: "0",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      console.log(email, password);
+      const result = await signIn("credentials", {
+        email,
+        password,
+        user_role: "0",
+        redirect: false,
+        callbackUrl: "http://localhost:3000/admin",
+      });
 
-      if (response.status === 200) {
-        console.log("Login successful:", response.data);
-        // Handle successful login (e.g., redirect to dashboard)
+      if (result?.ok) {
+        console.log("Login successful:", result);
         if (typeof window !== "undefined") {
           window.location.href = "/admin";
         }
-      } else {
-        setError("Login failed");
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError(error.response.data.error || "Login failed");
-      } else {
-        setError("An error occurred. Please try again.");
-      }
+      setError("An error occurred. Please try again.");
       console.error("Login error:", error);
     } finally {
       setLoading(false);
@@ -56,12 +43,12 @@ const LoginPage = () => {
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <div>
-          <label htmlFor="empId">Employee ID:</label>
+          <label htmlFor="email">Email ID:</label>
           <input
             type="text"
-            id="empId"
-            value={empId}
-            onChange={(e) => setEmpId(e.target.value)}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>

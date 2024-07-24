@@ -1,9 +1,16 @@
-"use client";
-import React, { useState } from "react";
-import axios from "axios";
-import { signIn, useSession } from "next-auth/react";
+// src/components/LoginForm.js
 
-const LoginPage = () => {
+"use client";
+
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import "./login.css";
+import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
+import biitslogo from "../../../public/images/biitsLogo.png";
+import adminLoginImg from "../../../public/images/admin_login_img.png";
+
+const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,16 +26,18 @@ const LoginPage = () => {
       const result = await signIn("credentials", {
         email,
         password,
-        user_role: "0",
+        user_role: "1",
         redirect: false,
         callbackUrl: "http://localhost:3000/admin",
       });
-
+      console.log(result);
       if (result?.ok) {
         console.log("Login successful:", result);
         if (typeof window !== "undefined") {
           window.location.href = "/admin";
         }
+      } else if (result?.error === "Login failed") {
+        setError("Please Check the Email and Password");
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
@@ -37,83 +46,75 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="email">Employee ID:</label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+    <div className="container-fluid">
+      <div className="row login-page">
+        <div
+          className="col-sm-5 welcome-section d-block justify-content-center align-items-center"
+          style={{ height: "100vh" }}
+        >
+          <div className="text-center p-5">
+            <Image src={biitslogo} className="img-brand" alt="brand-biits" />
+
+            <h1>Welcome to Expense Tracker</h1>
+            <p>Sign in to continue access</p>
+            <div>
+              <a
+                href="https://biitsinc.com/"
+                className="text-decoration-none text-info"
+              >
+                B-Informative IT Services Pvt.Ltd
+              </a>
+            </div>
+            <Image
+              src={adminLoginImg}
+              className="img-fluid object-fit-cover"
+              width={450}
+              alt="brand-biits"
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+        <div className="col-sm-7 login-form-container">
+          <form onSubmit={handleLogin} className="login-form">
+            <h2 className="signIn">Sign In</h2>
+            <div className="form-group mb-4">
+              <label className="mb-2">Email Address</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group mb-4">
+              <label className="mb-2">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            {/* <button type="submit" className="btn btn-primary">
+            Continue
+          </button> */}
+
+            {error && (
+              <div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>
+            )}
+            <button type="submit" className="btn btn-login" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+
+            {/* <div className="social-login">
+            <button className="btn btn-twitter">Sign In With Twitter</button>
+            <button className="btn btn-facebook">Sign In With Facebook</button>
+          </div> */}
+          </form>
         </div>
-        {error && <div className="error">{error}</div>}
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      <style jsx>{`
-        .login-container {
-          max-width: 400px;
-          margin: 0 auto;
-          padding: 2rem;
-          border: 1px solid #ccc;
-          border-radius: 8px;
-        }
-        .login-container h1 {
-          text-align: center;
-          margin-bottom: 1rem;
-        }
-        .login-container form {
-          display: flex;
-          flex-direction: column;
-        }
-        .login-container form div {
-          margin-bottom: 1rem;
-        }
-        .login-container form label {
-          margin-bottom: 0.5rem;
-          display: block;
-        }
-        .login-container form input {
-          width: 100%;
-          padding: 0.5rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        .login-container form .error {
-          color: red;
-          margin-bottom: 1rem;
-        }
-        .login-container form button {
-          padding: 0.75rem;
-          background-color: #0070f3;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-        }
-        .login-container form button:disabled {
-          background-color: #ccc;
-        }
-      `}</style>
+      </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default LoginForm;

@@ -9,7 +9,6 @@ export async function middleware(request) {
     if (authToken) {
       var response;
       const originalUrl = request.cookies.get("original_url");
-      console.log(originalUrl, "this is original url");
       if (
         originalUrl === "undefined" ||
         originalUrl === null ||

@@ -57,17 +57,29 @@ const authOptions = {
     error: "/",
   },
   callbacks: {
-    async jwt(token, user) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email;
-      }
-      return token;
+    async jwt({ token, user }) {
+      console.log(user);
+
+      return { ...token, ...user };
     },
-    async session(session, token) {
+    async session({ session, token }) {
+      console.log(token);
       session.user = token;
       return session;
     },
+
+    // async jwt({ user, token, trigger, session, account }) {
+    //   console.log("account", account);
+
+    //   return { ...token, ...user };
+    // },
+
+    // async session({ session, user, token, account, req, res }) {
+    //   console.log(token, "token");
+
+    //   session.user = token;
+    //   return session;
+    // },
   },
 };
 
