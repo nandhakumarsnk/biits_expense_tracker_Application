@@ -22,77 +22,82 @@ export const POST = async (req) => {
   }
 
   const items = [];
-  for (let i = 0; ; i++) {
-    console.log(i);
-
+  let i = 0;
+  while (formData.has(`item[${i}]item_category`)) {
     const item_category = formData.get(`item[${i}]item_category`);
     const item_subcategory = formData.get(`item[${i}]item_subcategory`);
     const description = formData.get(`item[${i}]description`);
     const amount = formData.get(`item[${i}]amount`);
     const amount_in_INR = formData.get(`item[${i}]amount_in_INR`);
 
-    console.log(
-      item_category,
-      item_subcategory,
-      description,
-      amount,
-      amount_in_INR
-    );
+    console.log(item_category);
+    console.log(item_subcategory);
+    console.log(description);
+    console.log(amount);
+    console.log(amount_in_INR);
 
     if (
-      !description &&
-      !item_category &&
-      !item_subcategory &&
-      !amount &&
+      !item_category ||
+      !item_subcategory ||
+      !description ||
+      !amount ||
       !amount_in_INR
     ) {
-      break;
-    }
-
-    const attachments = [];
-    for (let j = 0; ; j++) {
-      const file = formData.get(`item[${i}]attachment[${j}]`);
-      if (!file) break;
-      attachments.push(file);
+      i++;
+      continue;
     }
 
     const itemAttachments = [];
-    // const itemAttachments = ["/uploads/demo11/example_img_large.jpg"];
-    const uploadDir = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      emp_id
-      // `item_${i}`
-    );
+    let j = 0;
 
-    await fs.ensureDir(uploadDir);
-    for (const file of attachments) {
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const filename = file.name.replaceAll(" ", "_");
-      const filePath = path.join(uploadDir, filename);
+    while (formData.has(`item[${i}]attachment[${j}]`)) {
+      // const file = await formData.get(`item[${i}]attachment[${j}`);
+      const file = formData.get(`item[${i}]attachment[${j}]`);
 
-      await writeFile(filePath, buffer);
-      itemAttachments.push(`/uploads/${emp_id}/${filename}`);
+      console.log(file);
+      // Check if the file is from a browser or React Native
+      if (file.name) {
+        const buffer = Buffer.from(await file.arrayBuffer());
+        const filename = file.name.replace(/\s+/g, "_");
+        const uploadDir = path.join(process.cwd(), "public", "uploads", emp_id);
+        await fs.ensureDir(uploadDir);
+        const filePath = path.join(uploadDir, filename);
+
+        await fs.writeFile(filePath, buffer);
+        itemAttachments.push(`/uploads/${emp_id}/${filename}`);
+      } else {
+        // const { base64, fileName, originalPath, type, uri, width } = file;
+
+        const { base64, fileName } = JSON.parse(file);
+
+        // Create a buffer from the base64 string
+        const base64Data = base64.replace(/^data:image\/\w+;base64,/, "");
+        const buffer = Buffer.from(base64Data, "base64");
+
+        // Define the path to save the image
+        const uploadDir = path.join(process.cwd(), "public", "uploads", emp_id);
+        await fs.ensureDir(uploadDir);
+        const filePath = path.join(uploadDir, fileName);
+
+        // Save the image file
+        await fs.writeFile(filePath, buffer);
+        itemAttachments.push(`/uploads/${emp_id}/${fileName}`);
+      }
+
+      j++;
     }
 
-    if (
-      description &&
-      item_category &&
-      item_subcategory &&
-      amount &&
-      amount_in_INR
-    ) {
-      items.push({
-        id: i + 1,
-        item_category,
-        item_subcategory,
-        description,
-        amount: parseFloat(amount),
-        amount_in_INR: parseFloat(amount_in_INR),
-        attachments: itemAttachments,
-      });
-    }
+    items.push({
+      id: i + 1,
+      item_category,
+      item_subcategory,
+      description,
+      amount: parseFloat(amount),
+      amount_in_INR: parseFloat(amount_in_INR),
+      attachments: itemAttachments,
+    });
+
+    i++;
   }
 
   if (items.length === 0) {
@@ -109,14 +114,12 @@ export const POST = async (req) => {
     );
 
     return NextResponse.json(
-      { message: "Expense records added." },
+      { message: "Expense details stored successfully", data: formData },
       { status: 201 }
     );
   } catch (error) {
     console.error("Internal server error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+
+    return NextResponse.json({ UpdatedError: error }, { status: 400 });
   }
 };

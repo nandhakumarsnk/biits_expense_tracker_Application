@@ -47,6 +47,19 @@ export async function GET(request, { params }) {
       } else {
         expense.refund_receipt = [];
       }
+
+      // // Parse the items field from JSON string to an array
+      // if (expense.items) {
+      //   try {
+      //     expense.items = JSON.parse(expense.items);
+      //   } catch (error) {
+      //     console.error("Error parsing items:", error);
+      //     expense.items = [1];
+      //   }
+      // } else {
+      //   expense.items = [2];
+      // }
+
       return expense;
     });
 

@@ -9,6 +9,7 @@ import { FaRegEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { usePathname, useRouter } from "next/navigation";
+import * as XLSX from "xlsx";
 
 const renderPlaceholders = (length) => {
   const placeholders = Array.from({ length }, (_, index) => (
@@ -88,6 +89,53 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
     const updatedPath = `${pathname}`;
     router.replace(updatedPath, { shallow: true });
   };
+
+  const downloadExcel = () => {
+    const data = expensesList.map((expense) => ({
+      ID: expense.id,
+      "Employee ID": expense.emp_id,
+      "Employee Name": expense.emp_name,
+      Date: expense.date,
+      "Item Category": expense.items
+        .map((item) => item.item_category)
+        .join(", "),
+      "Item Subcategory": expense.items
+        .map((item) => item.item_subcategory)
+        .join(", "),
+      Description: expense.items.map((item) => item.description).join(", "),
+      Amount: expense.items.map((item) => item.amount).join(", "),
+      "Amount in INR": expense.items
+        .map((item) => item.amount_in_INR)
+        .join(", "),
+
+      Attachments: expense.items
+        .map((item) =>
+          item.attachments
+            .map(
+              (attachment) =>
+                `${process.env.NEXT_PUBLIC_EMPLOYEE_RECEIPT_IMAGE}/${attachment}`
+            )
+            .join(", ")
+        )
+        .join("; "),
+
+      "Refund Status": expense.refund_status,
+      "Refund Receipts": expense.refund_receipt
+        .map(
+          (receipt) =>
+            `${process.env.NEXT_PUBLIC_EMPLOYEE_RECEIPT_IMAGE}/${receipt}`
+        )
+        .join(", "),
+      "Created At": expense.created_at,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Expenses");
+
+    XLSX.writeFile(workbook, `Expenses_${employeeId}.xlsx`);
+  };
+
   return (
     <>
       <p
@@ -101,6 +149,7 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
         <MdOutlineKeyboardBackspace color="#1e1e75" size={40} /> &nbsp;
         <span className="back-btn">back</span>
       </p>
+      <button onClick={downloadExcel}>Download as Excel</button>
       <div className="row">
         <div className="app-table-pink">
           <div className="allApp-scroll px-3">

@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 console.log("aaaaaaa");
 const authOptions = {
+  secret: "boa$&a3cyq7eoda5hnip*hutg8rrmhg$j!ad61+88%s0bv-@*)",
   providers: [
     CredentialsProvider({
       name: "Credentials",

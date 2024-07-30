@@ -9,6 +9,7 @@ import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import biitslogo from "../../../public/images/biitsLogo.png";
 import adminLoginImg from "../../../public/images/admin_login_img.png";
+import axios from "axios";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -27,8 +28,9 @@ const LoginForm = () => {
         email,
         password,
         user_role: "1",
-        redirect: false,
-        callbackUrl: "http://localhost:3000/admin",
+        redirect: true,
+        // callbackUrl: "http://localhost:3000/admin",
+        // callbackUrl: "https://expenses.creowiz.com/admin",
       });
       console.log(result);
       if (result?.ok) {
@@ -46,6 +48,56 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
+
+  // const handleLogin = async (event) => {
+  //   event.preventDefault();
+
+  //   setLoading(true);
+
+  //   setError("");
+
+  //   const apiEndpoint = `${process.env.NEXT_PUBLIC_LOGIN_ADMIN}`;
+
+  //   try {
+  //     const response = await axios.post(
+  //       apiEndpoint,
+  //       {
+  //         email: email,
+  //         password: password,
+  //         user_role: "0",
+  //       },
+
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       console.log("Login successful:", response.data);
+
+  //       // Handle successful login (e.g., redirect to dashboard)
+
+  //       if (typeof window !== "undefined") {
+  //         window.location.href = "/admin";
+  //       }
+  //     } else {
+  //       setError("Login failed");
+  //     }
+  //   } catch (error) {
+  //     if (error.response && error.response.data) {
+  //       setError(error.response.data.error || "Login failed");
+  //     } else {
+  //       setError("An error occurred. Please try again.");
+  //     }
+
+  //     console.error("Login error:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   return (
     <div className="container-fluid">
       <div className="row login-page">

@@ -26,11 +26,13 @@
     "path": "^0.12.7",
     "react": "^18",
     "react-bootstrap": "^2.10.4",
+    "react-documents": "^1.2.1",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
     "react-modal-image": "^2.6.0",
     "react-toastify": "^10.0.5",
-    "winston": "^3.13.1"
+    "winston": "^3.13.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "eslint": "^8",

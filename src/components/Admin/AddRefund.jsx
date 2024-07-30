@@ -5,6 +5,8 @@ import { MdCancel } from "react-icons/md";
 import ModalImage from "react-modal-image";
 import { toast } from "react-toastify";
 
+const imgUrl = process.env.NEXT_PUBLIC_ADMIN_REFUND_IMAGE;
+
 const AddRefund = ({
   addRefundModal,
   setAddRefundModal,
@@ -75,7 +77,7 @@ const AddRefund = ({
 
       console.log("response", response);
 
-      if (response?.statusText === "OK") {
+      if (response?.status === 200) {
         toast.success("Refund Updated successfully!", {
           position: "top-center",
           autoClose: 2000,
@@ -109,7 +111,7 @@ const AddRefund = ({
           : [],
       });
       setReceiptFileName(
-        refundDetails?.refund_receipt ? "Images Uploaded" : ""
+        refundDetails?.refund_receipt.length > 0 ? "Images Uploaded" : ""
       );
       setRefundId(refundDetails?.id);
     } else {
@@ -122,7 +124,7 @@ const AddRefund = ({
     }
   }, [refundDetails]);
 
-  console.log(refundDetails?.refund_status);
+  console.log(refundDetails);
   return (
     <Modal
       show={addRefundModal}
@@ -136,8 +138,8 @@ const AddRefund = ({
       <Modal.Header>
         <Modal.Title className="refund-heading">
           {refundDetails?.refund_status !== "Fully Paid"
-            ? "ADD REFUND"
-            : "REFUND RECEIPTS"}
+            ? "MAKE REIMBURSEMENT"
+            : "REIMBURSEMENT RECEIPTS"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -150,13 +152,13 @@ const AddRefund = ({
                   className="viewrefund-image-wrapper mb-3"
                   style={{
                     width: "100px",
-                    height: "100px",
+                    height: "auto",
                     border: "1px solid orange",
                   }}
                 >
                   <ModalImage
-                    small={receipt}
-                    large={receipt}
+                    small={`${imgUrl}${receipt}`}
+                    large={`${imgUrl}${receipt}`}
                     alt={`refund-image-${index}`}
                     hideDownload={true}
                     hideZoom={true}
@@ -182,7 +184,7 @@ const AddRefund = ({
                       onChange={handleRadioChange}
                     />
                     <label className="form-check-label" htmlFor="inlineRadio1">
-                      Fully Paid
+                      Fully Pay
                     </label>
                   </div>
                   <div className="form-check form-check-inline">
@@ -196,7 +198,7 @@ const AddRefund = ({
                       onChange={handleRadioChange}
                     />
                     <label className="form-check-label" htmlFor="inlineRadio2">
-                      Partially Paid
+                      Partially Pay
                     </label>
                   </div>
                 </div>
@@ -233,13 +235,13 @@ const AddRefund = ({
                             className="viewrefund-image-wrapper"
                             style={{
                               width: "100px",
-                              height: "80px",
+                              height: "auto",
                               border: "1px solid orange",
                             }}
                           >
                             <ModalImage
-                              small={receiptImage}
-                              large={receiptImage}
+                              small={`${imgUrl}${receiptImage}`}
+                              large={`${imgUrl}${receiptImage}`}
                               alt={`blog-image-${index}`}
                               hideDownload={true}
                               hideZoom={true}
@@ -249,7 +251,7 @@ const AddRefund = ({
                         ) : (
                           <div
                             className="viewblog-image-wrapper ms-2"
-                            style={{ width: "100px", height: "100px" }}
+                            style={{ width: "100px", height: "auto" }}
                           >
                             <ModalImage
                               small={URL.createObjectURL(receiptImage)}
