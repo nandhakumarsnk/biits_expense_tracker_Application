@@ -5,11 +5,14 @@ import axios from "axios";
 import { Placeholder } from "react-bootstrap";
 import ViewExpenseReceipts from "./ViewExpenseReceipts";
 import AddRefund from "./AddRefund";
-import { FaRegEye } from "react-icons/fa";
+import { FaDownload, FaRegEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
 import { usePathname, useRouter } from "next/navigation";
 import * as XLSX from "xlsx";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { convertDataYYYYMMDD } from "@/services/helperfunctions";
 
 const renderPlaceholders = (length) => {
   const placeholders = Array.from({ length }, (_, index) => (
@@ -38,12 +41,33 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
   // const [expenseReceiptImages, setExpenseReceiptImages] = useState(null);
   const [refundDetails, setRefundDetails] = useState(null);
 
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const setDateRange = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
+
+  console.log(startDate);
+  console.log(endDate);
+
+  console.log(convertDataYYYYMMDD(startDate));
+  console.log(convertDataYYYYMMDD(endDate));
+
   const fetchExpensesData = useCallback(async () => {
     try {
       setReceiptLoading(true);
       if (employeeId) {
         let endpoint = `${process.env.NEXT_PUBLIC_GET_EMPLOYEE_EXPENSES}${employeeId}`;
-        // let endpoint = `http://localhost:3000/api/fetch_expenses/${employeeId}`;
+
+        if (startDate !== null && endDate !== null) {
+          let convertedStartDate = convertDataYYYYMMDD(startDate);
+          let convertedEndDate = convertDataYYYYMMDD(endDate);
+
+          endpoint += `?start_date=${convertedStartDate}&end_date=${convertedEndDate}`;
+        }
 
         const response = await axios.get(endpoint);
         console.log(response, "this is response");
@@ -64,7 +88,7 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
       console.error("Error fetching data from the API: ", error);
       setReceiptLoading(false);
     }
-  }, [employeeId]);
+  }, [employeeId, startDate, endDate]);
 
   console.log(expensesList);
 
@@ -138,18 +162,44 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
 
   return (
     <>
-      <p
-        onClick={() => {
-          setIndividualReceipts(false);
-          localStorage.removeItem("setIndividualReceipts");
-          localStorage.removeItem("setEmployeeId");
-          handleTabChange();
-        }}
-      >
-        <MdOutlineKeyboardBackspace color="#1e1e75" size={40} /> &nbsp;
-        <span className="back-btn">back</span>
-      </p>
-      <button onClick={downloadExcel}>Download as Excel</button>
+      <div className="row">
+        <div className="col-sm-auto">
+          <p
+            className="mb-0"
+            onClick={() => {
+              setIndividualReceipts(false);
+              localStorage.removeItem("setIndividualReceipts");
+              localStorage.removeItem("setEmployeeId");
+              handleTabChange();
+            }}
+          >
+            <MdOutlineKeyboardBackspace color="#1e1e75" size={40} /> &nbsp;
+            <span className="back-btn">back</span>
+          </p>
+        </div>
+      </div>
+      <div className="row mb-3">
+        <div className="d-flex justify-content-end mt-auto">
+          <div className="col-sm-auto selectDate me-3 ">
+            <DatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              className="form-control"
+              placeholderText="Select date range"
+              onChange={(update) => {
+                setDateRange(update);
+              }}
+              isClearable={true}
+            />
+          </div>
+          <button className="download-btn" onClick={downloadExcel}>
+            <FaDownload /> &nbsp;
+            <span>Download as Excel</span>
+          </button>
+        </div>
+      </div>
+
       <div className="row">
         <div className="app-table-pink">
           <div className="allApp-scroll px-3">

@@ -30,6 +30,29 @@
   color: rgb(71, 121, 245);
   cursor: pointer;
 }
+.selectDate {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid #e3e3e3;
+  border-radius: 5px;
+  height: 40px;
+}
+.selectDate :focus {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.download-btn {
+  background-color: #43a214;
+  border: none;
+  color: white;
+  padding: 5px 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
 /* ==============  TABLE ============== */
 .allApp-scroll {
   max-height: 805px;
@@ -39,7 +62,7 @@
   position: sticky;
   top: 0;
   background-color: white;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .app-table-pink {

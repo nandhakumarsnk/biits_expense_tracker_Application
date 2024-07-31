@@ -125,7 +125,7 @@ const Admin = () => {
         <div className="col-sm-1 d-flex justify-content-end">
           <button
             type="button"
-            className="btn nav-bar-button mx-3 mt-3 mb-5"
+            className="btn nav-bar-button mx-3 mt-3"
             onClick={handleSignOut}
           >
             Logout

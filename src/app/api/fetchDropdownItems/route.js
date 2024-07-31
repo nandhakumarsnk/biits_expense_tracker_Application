@@ -1,4 +1,3 @@
-// pages/api/fetchDropdownItems.js
 
 import { NextResponse } from "next/server";
 import db from "../../db";
