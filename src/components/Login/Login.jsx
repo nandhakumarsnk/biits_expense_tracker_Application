@@ -10,6 +10,7 @@ import Image from "next/image";
 import biitslogo from "../../../public/images/biitsLogo.png";
 import adminLoginImg from "../../../public/images/admin_login_img.png";
 import axios from "axios";
+import Link from "next/link";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -106,18 +107,28 @@ const LoginForm = () => {
           style={{ height: "100vh" }}
         >
           <div className="text-center p-5">
-            <Image src={biitslogo} className="img-brand" alt="brand-biits" />
+            {/* <Image src={biitslogo} className="img-brand" alt="brand-biits" /> */}
+
+            <Link href="https://biitsinc.com/" legacyBehavior>
+              <a target="_blank" rel="noopener noreferrer">
+                <Image
+                  src={biitslogo}
+                  className="img-brand"
+                  alt="brand-biits"
+                />
+              </a>
+            </Link>
 
             <h1>Welcome to Expense Tracker</h1>
-            <p>Sign in to continue access</p>
-            <div>
+            {/* <p>Sign in to continue access</p> */}
+            {/* <div>
               <a
                 href="https://biitsinc.com/"
                 className="text-decoration-none text-info"
               >
                 B-Informative IT Services Pvt.Ltd
               </a>
-            </div>
+            </div> */}
             <Image
               src={adminLoginImg}
               className="img-fluid object-fit-cover"
@@ -128,7 +139,7 @@ const LoginForm = () => {
         </div>
         <div className="col-sm-7 login-form-container">
           <form onSubmit={handleLogin} className="login-form">
-            <h2 className="signIn">Sign In</h2>
+            <h2 className="signIn">Admin Login</h2>
             <div className="form-group mb-4">
               <label className="mb-2">Email Address</label>
               <input

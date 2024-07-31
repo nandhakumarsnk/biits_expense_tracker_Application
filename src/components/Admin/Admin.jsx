@@ -5,13 +5,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Placeholder } from "react-bootstrap";
 import noData from "../../../public/images/nodata.png";
 import EmployeeReceiptList from "./EmployeeReceiptList";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import "./admin.css";
 import { FaRegEye } from "react-icons/fa";
-import biitslogo from "../../../public/images/biitsLogo.png";
 import { usePathname, useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import { HiOutlineLogout } from "react-icons/hi";
 
 const renderPlaceholders = (length) => {
   const placeholders = Array.from({ length }, (_, index) => (
@@ -59,29 +56,6 @@ const Admin = () => {
     }
   }, []);
 
-  const handleSignOut = async () => {
-    try {
-      await signOut({
-        redirect: true,
-        callbackUrl: "/login",
-      });
-      clearCookies();
-
-      toast.success("Sign Out Successfully", {
-        autoClose: 3000,
-        position: "top-center",
-      });
-
-      setTimeout(() => {
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
-      }, [3000]);
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
-
   const fetchAllEmployees = useCallback(async () => {
     try {
       setLoading(true);
@@ -112,32 +86,9 @@ const Admin = () => {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row header-container">
-        <div className="col-sm-auto">
-          <Image src={biitslogo} className="img-brand" alt="brand-biits" />
-        </div>
-        <div className="col-sm">
-          <h1 className="app-heading text-center mt-4">
-            BIITS EXPENSE TRACKER
-          </h1>
-        </div>
-        <div className="col-sm-1 d-flex justify-content-end">
-          <button
-            type="button"
-            className="btn nav-bar-button mx-3 mt-3"
-            onClick={handleSignOut}
-          >
-            Logout
-            <span>
-              <HiOutlineLogout color="red" size={25} />
-            </span>
-          </button>
-        </div>
-      </div>
-
+    <>
       {!individualReceipts && (
-        <div className="app-table-pink mt-5">
+        <div className="app-table-pink mt-2">
           <div className="row">
             <div className="allApp-scroll px-3">
               <table className="table">
@@ -241,7 +192,7 @@ const Admin = () => {
           />
         </>
       )}
-    </div>
+    </>
   );
 };
 

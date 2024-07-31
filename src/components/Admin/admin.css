@@ -1,18 +1,5 @@
 /* ==============  HEADER ============== */
-.header-container {
-  height: 100px;
-  background: #f8f8f8 0% 0% no-repeat padding-box;
-}
-.img-brand {
-  height: 100px;
-  width: 130px;
-  object-fit: contain;
-}
-.app-heading {
-  font-size: 30px;
-  font-weight: 600;
-  color: #1e1e75;
-}
+
 .back-btn {
   font-size: 18px;
   font-weight: 600;
