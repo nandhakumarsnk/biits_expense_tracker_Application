@@ -1,0 +1,69 @@
+/* =============== HEADER =============== */
+.header-container {
+  height: 100px;
+  background: #f8f8f8 0% 0% no-repeat padding-box;
+}
+.img-brand {
+  height: 100px;
+  width: 130px;
+  object-fit: contain;
+}
+.app-heading {
+  font-size: 30px;
+  font-weight: 600;
+  color: #1e1e75;
+}
+
+/* ============= SIDEBAR ================ */
+.sidebar {
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: 5px;
+  min-height: 86vh;
+}
+.custom-navbar {
+  width: 95%;
+  text-align: center;
+  background: #f5f5f5 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+}
+.nav-link.nav-bar-links {
+  text-decoration: none;
+  font-size: 14px;
+  color: #414146;
+  height: 44px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  border: 1px solid #e3e3e3;
+  border-radius: 5px;
+}
+
+.activeLinks {
+  color: white !important;
+  background: #1740a1 0% 0% no-repeat padding-box !important;
+}
+.btn.nav-bar-button {
+  text-decoration: none;
+  font-size: 14px;
+  width: 88%;
+  height: 44px;
+  background: #b50000 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  color: #ffffff;
+  border: 1px solid #e3e3e3;
+  border-radius: 5px;
+}
+
+.btn.nav-bar-button:active {
+  border: 0;
+  color: #ffffff;
+  background: #b50000 0% 0% no-repeat padding-box;
+}
+
+.nav-bar-button:focus {
+  border-radius: none;
+  border: 0;
+  color: #ffffff;
+  background: #b50000 0% 0% no-repeat padding-box;
+}

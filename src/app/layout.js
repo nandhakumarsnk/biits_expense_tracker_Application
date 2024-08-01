@@ -10,8 +10,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Router } from "next/router";
 import Loading from "@/components/Loading/PageLoading/Loading";
-import Header from "@/components/Sidebar/Header";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import Header from "@/components/HeaderSidebar/Header";
+import Sidebar from "@/components/HeaderSidebar/Sidebar";
 
 const poppins = Poppins({
   weight: ["300", "400", "500", "700"],

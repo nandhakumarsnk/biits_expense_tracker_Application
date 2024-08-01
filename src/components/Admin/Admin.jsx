@@ -31,6 +31,7 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [employeeList, setEmployeeList] = useState([]);
   const [employeeId, setEmployeeId] = useState(null);
+  const [employeeName, setEmployeeName] = useState(null);
   const [individualReceipts, setIndividualReceipts] = useState(false);
   // const [employeeId, setEmployeeId] = useState(
   //   localStorage.getItem("setEmployeeId") || null
@@ -50,6 +51,7 @@ const Admin = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setEmployeeId(localStorage.getItem("setEmployeeId") || null);
+      setEmployeeName(localStorage.getItem("setEmployeeName") || null);
       setIndividualReceipts(
         localStorage.getItem("setIndividualReceipts") || false
       );
@@ -89,10 +91,11 @@ const Admin = () => {
     <>
       {!individualReceipts && (
         <div className="app-table-pink mt-2">
+          <p className="home-heading mx-3">List of Employees</p>
           <div className="row">
             <div className="allApp-scroll px-3">
               <table className="table">
-                <thead className="custom-table-head">
+                <thead className="custom-table-head ">
                   <tr className="text-center">
                     <th scope="col" className="appHead">
                       S.no
@@ -155,6 +158,7 @@ const Admin = () => {
                                 onClick={() => {
                                   setIndividualReceipts(true);
                                   setEmployeeId(employee?.emp_id);
+                                  setEmployeeName(employee?.name);
                                   handleTabChange();
                                   if (typeof window !== "undefined") {
                                     localStorage.setItem(
@@ -164,6 +168,10 @@ const Admin = () => {
                                     localStorage.setItem(
                                       "setEmployeeId",
                                       employee?.emp_id
+                                    );
+                                    localStorage.setItem(
+                                      "setEmployeeName",
+                                      employee?.name
                                     );
                                   }
                                 }}
@@ -189,6 +197,7 @@ const Admin = () => {
           <EmployeeReceiptList
             setIndividualReceipts={setIndividualReceipts}
             employeeId={employeeId}
+            employeeName={employeeName}
           />
         </>
       )}

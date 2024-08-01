@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Item_Category from "./Item_Category";
 import Sub_Category from "./Sub_Category";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import "./contentmanagement.css";
 
 const ContentManagement = () => {
   const searchParams = useSearchParams();
@@ -19,20 +20,20 @@ const ContentManagement = () => {
   return (
     <>
       <div className="row">
-        <div className="allApproval-container">
+        <div className="contentManage-container">
           <>
-            <p className="d-inline-flex gap-1 buttons-row mt-3">
+            <p className="d-inline-flex gap-1 buttons-row mt-3 mb-4">
               <button
-                className={`btn approvals-grey-btn ${
-                  activeTab === "itemCategory" ? "activeApprovalsTab" : ""
+                className={`btn content-grey-btn ${
+                  activeTab === "itemCategory" ? "activeContentTab" : ""
                 }`}
                 onClick={() => handleTabChange("itemCategory")}
               >
                 Item Category
               </button>
               <button
-                className={`btn approvals-grey-btn ${
-                  activeTab === "itemSubCategory" ? "activeApprovalsTab" : ""
+                className={`btn content-grey-btn ${
+                  activeTab === "itemSubCategory" ? "activeContentTab" : ""
                 }`}
                 onClick={() => handleTabChange("itemSubCategory")}
               >

@@ -30,7 +30,11 @@ const renderPlaceholders = (length) => {
   return placeholders;
 };
 
-const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
+const EmployeeReceiptList = ({
+  setIndividualReceipts,
+  employeeId,
+  employeeName,
+}) => {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -162,7 +166,7 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
 
   return (
     <>
-      <div className="row">
+      <div className="row my-2">
         <div className="col-sm-auto">
           <p
             className="mb-0"
@@ -170,6 +174,7 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
               setIndividualReceipts(false);
               localStorage.removeItem("setIndividualReceipts");
               localStorage.removeItem("setEmployeeId");
+              localStorage.removeItem("setEmployeeName");
               handleTabChange();
             }}
           >
@@ -177,9 +182,7 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
             <span className="back-btn">back</span>
           </p>
         </div>
-      </div>
-      <div className="row mb-3">
-        <div className="d-flex justify-content-end mt-auto">
+        <div className="col-sm d-flex justify-content-end mt-auto">
           <div className="col-sm-auto selectDate me-3 ">
             <DatePicker
               selectsRange={true}
@@ -201,8 +204,9 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
       </div>
 
       <div className="row">
+        <p className="home-heading">Expense Lists for {employeeName}</p>
         <div className="app-table-pink">
-          <div className="allApp-scroll px-3">
+          <div className="allApp-scroll1 px-3">
             <table className="table">
               <thead className="custom-table-head">
                 <tr className="text-center">
@@ -222,10 +226,10 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
                     View Details
                   </th>
                   <th scope="col" className="appHead">
-                    Refund Status
+                    Reimbursement Status
                   </th>
                   <th scope="col" className="appHead">
-                    Refund Receipts
+                    Reimbursement Receipts
                   </th>
                 </tr>
               </thead>
@@ -234,7 +238,7 @@ const EmployeeReceiptList = ({ setIndividualReceipts, employeeId }) => {
                 {receiptLoading ? (
                   <tr>
                     {" "}
-                    <td colSpan="9">{renderPlaceholders(10)}</td>{" "}
+                    <td colSpan="9">{renderPlaceholders(9)}</td>{" "}
                   </tr>
                 ) : (
                   <>

@@ -1,0 +1,79 @@
+.contentManage-container {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 2px solid #dfdfdf;
+  border-radius: 8px;
+  margin-top: 15px;
+  height: 87vh;
+}
+
+.content-grey-btn,
+.content-grey-btn:active {
+  width: 169px;
+  height: 38px;
+  background: #f6f6f6 0% 0% no-repeat padding-box;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #5b5b5b;
+  font-weight: 500;
+}
+.activeContentTab {
+  width: 169px !important;
+  height: 38px !important;
+  background: #414146 0% 0% no-repeat padding-box !important;
+  color: #fbfbfb !important;
+}
+
+/* ============== ITEM CATEGORY ================= */
+.custom-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.custom-form-control {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.purple-button,
+.purple-button:hover,
+.purple-button:active {
+  background-color: #1740a1;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.table-wrapper {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.sticky-table-head {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1;
+}
+
+/* .table {
+  width: 100%;
+  border-collapse: collapse;
+} */
+
+/* .table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 0.7rem 0.5rem;
+} */
+
+.table th {
+  background-color: #f2f2f2;
+}
+.edit-update-button,
+.edit-update-button:hover {
+  background-color: #1740a1;
+  border: none;
+  color: white;
+}

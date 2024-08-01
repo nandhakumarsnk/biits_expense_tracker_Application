@@ -179,7 +179,7 @@ const Sub_Category = () => {
   return (
     <>
       <div className="row">
-        <div className="col-sm-4">
+        <div className="col-sm-3">
           <div className="">
             <label htmlFor="hoursSelect" className="form-label custom-label">
               Select Item Category
@@ -224,10 +224,10 @@ const Sub_Category = () => {
             onClick={handleAddItemCategory}
             className="btn purple-button"
           >
-            {loading ? "Please wait.." : "Add Item Category"}
+            {loading ? "Please wait.." : "Add Item SubCategory"}
           </button>
         </div>
-        <div className="col-sm-8">
+        <div className="col-sm-9">
           <div className="table-wrapper">
             <table className="table">
               <thead className="sticky-table-head">
@@ -252,27 +252,27 @@ const Sub_Category = () => {
                       item.subcategories.map((subcategory) => (
                         <tr key={subcategory.value}>
                           {/* <th scope="row">{index + 1}</th> */}
-                          <td>{serialNumber++}</td>
+                          <th>{serialNumber++}</th>
                           <td>{item.category?.label}</td>
                           <td>{subcategory?.label}</td>
                           <td>
                             <button
-                              className="btn btn-primary btn-sm"
+                              className="btn btn-light btn-sm"
                               onClick={() =>
                                 handleEditClick(item.category, subcategory)
                               }
                             >
-                              <MdEdit />
+                              <MdEdit color="purple" size={25} />
                             </button>
                           </td>
                           <td>
                             <button
-                              className="btn btn-danger btn-sm"
+                              className="btn btn-light btn-sm"
                               onClick={() =>
                                 handleDeleteClick(subcategory?.value)
                               }
                             >
-                              <MdDelete />
+                              <MdDelete color="purple" size={25} />
                             </button>
                           </td>
                         </tr>

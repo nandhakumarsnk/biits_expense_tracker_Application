@@ -8,13 +8,12 @@ import Swal from "sweetalert2";
 
 const Item_Category = () => {
   const [loading, setLoading] = useState(false);
-    const [addItemCategory, setAddItemCategory] = useState("");
+  const [addItemCategory, setAddItemCategory] = useState("");
   const [selectedItemCategory, setSelectedItemCategory] = useState(null);
   const [showItemCategoryEditModal, setShowItemCategoryEditModal] =
     useState(false);
   const [itemCategoryList, setItemCategoryList] = useState(null);
   const [formData, setFormData] = useState({ id: "", name: "" });
-
 
   const getListOfItemCategories = useCallback(async () => {
     try {
@@ -159,15 +158,15 @@ const Item_Category = () => {
   return (
     <>
       <div className="row">
-        <div className="col-sm-4">
+        <div className="col-sm-3">
           <div className="mb-3">
-            <label htmlFor="designation" className="form-label custom-label">
+            <label htmlFor="itemCategory" className="form-label custom-label">
               Item Category
             </label>
             <input
               type="text"
               className="form-control custom-form-control"
-              id="designation"
+              id="itemCategory"
               value={addItemCategory}
               onChange={(e) => setAddItemCategory(e.target.value)}
               placeholder="Enter Item Category"
@@ -182,7 +181,7 @@ const Item_Category = () => {
             {loading ? "Please wait.." : "Add Item Category"}
           </button>
         </div>
-        <div className="col-sm-8">
+        <div className="col-sm-9">
           <div className="table-wrapper">
             <table className="table">
               <thead className="sticky-table-head">

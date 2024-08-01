@@ -1,4 +1,9 @@
 /* ==============  HEADER ============== */
+.home-heading {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1740a1;
+}
 
 .back-btn {
   font-size: 18px;
@@ -42,14 +47,19 @@
 }
 /* ==============  TABLE ============== */
 .allApp-scroll {
-  max-height: 805px;
+  min-height: 80vh;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.allApp-scroll1 {
+  min-height: 75vh;
+  max-height: 75vh;
   overflow-y: auto;
 }
 .custom-table-head {
   position: sticky;
   top: 0;
   background-color: white;
-  /* z-index: 1; */
 }
 
 .app-table-pink {
