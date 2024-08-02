@@ -11,9 +11,9 @@
 // };
 
 module.exports = {
-  experimental: {
-    appDir: true,
-  },
+  // experimental: {
+  //   appDir: true,
+  // },
   reactStrictMode: true,
   async rewrites() {
     return [

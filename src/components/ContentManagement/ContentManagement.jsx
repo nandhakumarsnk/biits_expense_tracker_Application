@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Item_Category from "./Item_Category";
 import Sub_Category from "./Sub_Category";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -40,8 +40,10 @@ const ContentManagement = () => {
                 Item SubCategory
               </button>
             </p>
-            {activeTab === "itemCategory" && <Item_Category />}
-            {activeTab === "itemSubCategory" && <Sub_Category />}
+           
+              {activeTab === "itemCategory" && <Item_Category />}
+              {activeTab === "itemSubCategory" && <Sub_Category />}
+            
           </>
         </div>
       </div>

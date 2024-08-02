@@ -1,8 +1,12 @@
 import ContentManagement from "@/components/ContentManagement/ContentManagement";
-import React from "react";
+import React, { Suspense } from "react";
 
 const page = () => {
-  return <ContentManagement />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ContentManagement />
+    </Suspense>
+  );
 };
 
 export default page;
